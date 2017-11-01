@@ -1,0 +1,15 @@
+4, 6, 8, 10, 12, 20
+
+Player can select the number of dice to roll
+Even number results = 1 point
+ - numbers > 10 = 2 points
+ - even numbers summation > odd numbers summation = 3
+Odd number results = -1 point
+ - numbers > 10 points = -2 points
+ - odd numbers summation > even numbers summation = -3
+
+to generate a random number
+ - x = Math.random(1, 7);
+	- starts at 1, and will go up to and NOT INCLUDE 7
+
+

@@ -1,0 +1,93 @@
+
+launchGame();
+
+function launchGame(){
+	let userInput = displayMainMenu();
+	if (userInput === "start"){
+		startGame();
+		let rolledAgain = rollDice();
+		if (rolledAgain == true){
+			rollDice(rolledAgain); 
+		}
+	}
+	else if(userInput === "exit"){
+		exitGame();
+		return 0;
+	}
+}	
+
+function displayMainMenu(){
+	alert("Please make a selection!");
+	let userInput = prompt("START " + "or" + " EXIT")
+	userInput = userInput.toLowerCase();
+	if (userInput !== "start" && userInput !== "exit"){
+		alert("Command not recognized, please try again")
+		displayMainMenu();
+	}
+	return userInput;
+}
+
+function startGame(){
+	alert("You have started a game!");
+	alert("You roll the dice!");
+	return 0;
+
+}
+
+function exitGame(){
+	alert("Thanks for playing!");
+	return 0;
+}
+
+function rollDice(rolledAgain){
+		let diceResults = [];
+		let d4 = Math.floor(Math.random() * 4 + 1);
+		let d6 = Math.floor(Math.random() * 6 + 1);
+		let d8 = Math.floor(Math.random() * 8 + 1);
+		let d10 = Math.floor(Math.random() * 10 + 1);
+		let d12 = Math.floor(Math.random() * 12 + 1);
+		let d20 = Math.floor(Math.random() * 20 + 1);
+		diceResults.push(d4,d6,d8,d10,d12,d20)
+		alert("You rolled " + diceResults);
+		if(rolledAgain !== true){
+			let rollAgain = prompt("Would you like to roll again? YES or NO");
+			rollAgain = rollAgain.toLowerCase();
+			if(rollAgain === "yes"){
+			let rolledAgain = true
+			rollDice(rolledAgain);
+			}
+			else if (rollAgain === "no"){
+
+			}
+		}
+		else{
+			alert("End of Game!");
+		}
+}
+
+
+
+function rollD4(){
+	let d4 = Math.floor(Math.random() * 4 + 1);
+	return d4;
+}
+function rollD6(){
+	let d6 = Math.floor(Math.random() * 6 + 1);
+	return d6;
+}
+function rollD8(){
+	let d8 = Math.floor(Math.random() * 8 + 1);
+	return d8;
+}
+function rollD10(){
+	let d10 = Math.floor(Math.random() * 10 + 1);
+	return d10;
+}
+function rollD12(){
+	let d12 = Math.floor(Math.random() * 12 + 1);
+	return d12;
+}
+function rollD20(){
+	let d20 = Math.floor(Math.random() * 20 + 1);
+	return d20;
+}
