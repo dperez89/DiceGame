@@ -4,7 +4,8 @@ launchGame();
 
 function launchGame(){
 	let totalPoints = 0;
-	let newPoints;
+	let newOddEvenPoints;
+	let newGreaterThanPoints;
 	let diceResults;
 	let userInput = displayMainMenu();
 
@@ -12,8 +13,9 @@ function launchGame(){
 		startGame();
 		for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
 			diceResults = rollDice();
-			newPoints = getNewPoints(diceResults);
-			totalPoints += newPoints;
+			newOddEvenPoints = getOddEvenPoints(diceResults);
+			newGreaterThanPoints = getGreaterThanPoints(diceResults);
+			totalPoints += (newOddEvenPoints + newGreaterThanPoints);
 			alert("You currently have " + totalPoints + " points.");
 			alert("You have " + turnsLeft + " turns left.")
 		}
@@ -81,22 +83,46 @@ function rollDiceAgain(){
 		return diceResults;
 }
 
-function getNewPoints(diceResults){
-	let newPoints = 0;
-	let evenNumberPoint = 1
-	let oddNumberPoint = -1
+function getOddEvenPoints(diceResults){
+	let newOddEvenPoints = 0;
+	let evenNumberPoints = 1
+	let oddNumberPoints = -1
 	let evenNumberDivisor = 2
 	for (let i = 0; i < diceResults.length; i++){
 		if (diceResults[i] % evenNumberDivisor == 0){
-			newPoints += evenNumberPoint;
+			newOddEvenPoints += evenNumberPoints;
 		}
 		else if(diceResults[i] % evenNumberDivisor != 0){
-			newPoints += oddNumberPoint;
+			newOddEvenPoints += oddNumberPoints;
 		}
 	}
+	return newOddEvenPoints;
+}
 
-	return newPoints;
-
+function getGreaterThanPoints(diceResults){
+	let newGreaterThanPoints = 0;
+	let evenGreaterThanTenPoints = 3;
+	let oddGreaterThanTenPoints = -3;
+	let evenGreaterThanFivePoints = 2;
+	let oddGreaterThanFivePoints = -2;
+	let evenNumberDivisor = 2;
+	let greaterThanTen = 10;
+	let greaterThanFive = 5
+	for(let i = 0; i < diceResults.length; i++){
+		if(diceResults[i] % evenNumberDivisor == 0 && diceResults[i] >= greaterThanTen){
+			newGreaterThanPoints += evenGreaterThanTenPoints;
+		}
+		else if(diceResults[i] % evenNumberDivisor != 0 && diceResults[i] >= greaterThanTen){
+			newGreaterThanPoints += oddGreaterThanTenPoints;
+		}
+		else if(diceResults[i] % evenNumberDivisor == 0 && diceResults[i] >= greaterThanFive){
+			newGreaterThanPoints += evenGreaterThanFivePoints;
+		}
+		else if(diceResults[i] % evenNumberDivisor != 0 && diceResults[i] >= greaterThanFive){
+			newGreaterThanPoints += oddGreaterThanFivePoints;
+		}
+	}
+	return newGreaterThanPoints;
 }
 
 function rollD4(){
