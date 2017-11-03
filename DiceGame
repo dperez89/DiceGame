@@ -1,13 +1,21 @@
+"use strict";
 
 launchGame();
 
 function launchGame(){
+	let totalPoints = 0;
+	let newPoints;
+	let diceResults;
 	let userInput = displayMainMenu();
+
 	if (userInput === "start"){
 		startGame();
-		let rolledAgain = rollDice();
-		if (rolledAgain == true){
-			rollDice(rolledAgain); 
+		for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
+			diceResults = rollDice();
+			newPoints = getNewPoints(diceResults);
+			totalPoints += newPoints;
+			alert("You currently have " + totalPoints + " points.");
+			alert("You have " + turnsLeft + " turns left.")
 		}
 	}
 	else if(userInput === "exit"){
@@ -29,9 +37,7 @@ function displayMainMenu(){
 
 function startGame(){
 	alert("You have started a game!");
-	alert("You roll the dice!");
 	return 0;
-
 }
 
 function exitGame(){
@@ -39,7 +45,8 @@ function exitGame(){
 	return 0;
 }
 
-function rollDice(rolledAgain){
+function rollDice(){
+		alert("You roll the dice!")
 		let diceResults = [];
 		let d4 = Math.floor(Math.random() * 4 + 1);
 		let d6 = Math.floor(Math.random() * 6 + 1);
@@ -47,25 +54,50 @@ function rollDice(rolledAgain){
 		let d10 = Math.floor(Math.random() * 10 + 1);
 		let d12 = Math.floor(Math.random() * 12 + 1);
 		let d20 = Math.floor(Math.random() * 20 + 1);
-		diceResults.push(d4,d6,d8,d10,d12,d20)
+		diceResults.push(d4,d6,d8,d10,d12,d20);
 		alert("You rolled " + diceResults);
-		if(rolledAgain !== true){
-			let rollAgain = prompt("Would you like to roll again? YES or NO");
-			rollAgain = rollAgain.toLowerCase();
-			if(rollAgain === "yes"){
-			let rolledAgain = true
-			rollDice(rolledAgain);
-			}
-			else if (rollAgain === "no"){
-
-			}
+		let rollAgain = prompt("Would you like to roll again? YES or NO.");
+		rollAgain = rollAgain.toLowerCase();
+		if(rollAgain == "yes"){
+			diceResults = rollDiceAgain();
+			return diceResults;
 		}
-		else{
-			alert("End of Game!");
+		else if (rollAgain == "no"){
+			return diceResults;
 		}
 }
 
+function rollDiceAgain(){
+		let diceResults = [];
+		alert("You roll the dice a second time!");
+		let d4 = Math.floor(Math.random() * 4 + 1);
+		let d6 = Math.floor(Math.random() * 6 + 1);
+		let d8 = Math.floor(Math.random() * 8 + 1);
+		let d10 = Math.floor(Math.random() * 10 + 1);
+		let d12 = Math.floor(Math.random() * 12 + 1);
+		let d20 = Math.floor(Math.random() * 20 + 1);
+		diceResults.push(d4,d6,d8,d10,d12,d20);
+		alert("You rolled " + diceResults);
+		return diceResults;
+}
 
+function getNewPoints(diceResults){
+	let newPoints = 0;
+	let evenNumberPoint = 1
+	let oddNumberPoint = -1
+	let evenNumberDivisor = 2
+	for (let i = 0; i < diceResults.length; i++){
+		if (diceResults[i] % evenNumberDivisor == 0){
+			newPoints += evenNumberPoint;
+		}
+		else if(diceResults[i] % evenNumberDivisor != 0){
+			newPoints += oddNumberPoint;
+		}
+	}
+
+	return newPoints;
+
+}
 
 function rollD4(){
 	let d4 = Math.floor(Math.random() * 4 + 1);
