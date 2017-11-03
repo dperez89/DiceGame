@@ -4,6 +4,7 @@ launchGame();
 
 function launchGame(){
 	let totalPoints = 0;
+	let winStatus = false;
 	let newOddEvenPoints;
 	let newGreaterThanPoints;
 	let diceResults;
@@ -18,7 +19,12 @@ function launchGame(){
 			totalPoints += (newOddEvenPoints + newGreaterThanPoints);
 			alert("You currently have " + totalPoints + " points.");
 			alert("You have " + turnsLeft + " turns left.")
+			checkWinConditions(totalPoints, turnsLeft);
+			if(winStatus == true){
+				exitGame();
+			}
 		}
+
 	}
 	else if(userInput === "exit"){
 		exitGame();
@@ -123,6 +129,18 @@ function getGreaterThanPoints(diceResults){
 		}
 	}
 	return newGreaterThanPoints;
+}
+
+function checkWinConditions(totalPoints, turnsLeft){
+	let positiveWinThreshold = 10;
+	let negativeWinThreshold = -10;
+	if(totalPoints <= negativeWinThreshold || totalPoints >= positiveWinThreshold){
+		alert("Congratulations, you have won the game by accumulating " + totalPoints + " points!")
+		return 0;
+	}
+	else if(turnsLeft = 0){
+		alert("You've run out of turns! Game Over! (You accumulated " + totalPoints + " points.");
+	}
 }
 
 function rollD4(){
