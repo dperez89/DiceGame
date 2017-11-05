@@ -21,7 +21,6 @@ function launchGame(){
 		userInput = userInput.toLowerCase();
 		if (userInput === "start"){
 			newGameStatus = false;
-			rules();
 			startGame();
 			for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
 				diceResults = rollDice(totalPoints, turnsLeft);
@@ -44,6 +43,9 @@ function launchGame(){
 			exitGame();
 			return 0;
 		}
+		else if(userInput === "rules"){
+			rules();
+		}
 		else{
 			alert("Command not recognized, please try again");
 		}
@@ -52,7 +54,7 @@ function launchGame(){
 
 function getUserInput(){
 	alert("Please make a selection!");
-	let userInput = prompt("START\nEXIT");
+	let userInput = prompt("START\nRULES\nEXIT");
 	userInput = userInput.toLowerCase();
 	return userInput;
 }
