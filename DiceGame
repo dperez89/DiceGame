@@ -8,19 +8,22 @@ function launchGame(){
 	let newOddEvenPoints;
 	let newGreaterThanPoints;
 	let diceResults;
-	let userInput = displayMainMenu();
+	let userInput = getUserInput();
 
 	if (userInput === "start"){
+		rules();
 		startGame();
 		for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
-			diceResults = rollDice();
+			diceResults = rollDice(totalPoints, turnsLeft);
 			newOddEvenPoints = getOddEvenPoints(diceResults);
 			newGreaterThanPoints = getGreaterThanPoints(diceResults);
 			totalPoints += (newOddEvenPoints + newGreaterThanPoints);
-			alert("You currently have " + totalPoints + " points.");
-			alert("You have " + turnsLeft + " turns left.")
-			checkWinConditions(totalPoints, turnsLeft);
+			alert("You gain " + (newOddEvenPoints + newGreaterThanPoints) + " points from this turn!");
+			alert("You now have a total of " + totalPoints + " points.");
+			alert("You now have " + (turnsLeft - 1) + " turns left.")
+			winStatus = checkWinConditions(totalPoints, turnsLeft);
 			if(winStatus == true){
+				turnsLeft = -1;
 				exitGame();
 			}
 		}
@@ -30,15 +33,18 @@ function launchGame(){
 		exitGame();
 		return 0;
 	}
+	else if(userInput === "error"){
+		alert("Command not recognized, please try again");
+		getUserInput();
+	}
 }	
 
-function displayMainMenu(){
+function getUserInput(){
 	alert("Please make a selection!");
-	let userInput = prompt("START " + "or" + " EXIT")
+	let userInput = prompt("START " + "or" + " EXIT " + " RULES")
 	userInput = userInput.toLowerCase();
-	if (userInput !== "start" && userInput !== "exit"){
-		alert("Command not recognized, please try again")
-		displayMainMenu();
+	if (userInput !== "start" && userInput !== "exit" && userInput !== "rules"){
+		userInput = "error";
 	}
 	return userInput;
 }
@@ -52,8 +58,15 @@ function exitGame(){
 	alert("Thanks for playing!");
 	return 0;
 }
+function rules(userInput){
+	alert("Welcome to David's Dice Game!\nThe rules of the game are simple.\nYou have 5 turns to achieve a either a 10-or-greater or -10-or-lesser\nPress ENTER or click OK to continue...");
+	alert("Points are awarded based on if a dice is even (+1 point) and greater than 5 (+2 points) or 10 (+3 points)\n\nThey're also awarded based on if a dice is odd (-1 point) and greater than 5 (-2 points) or greater than 10 (-3 points)\nPress ENTER or click OK to continue...");
+	alert("You are allowed a single re-roll each turn so use your best judgement to try and achieve the goal of 10 or -10 before you run out of turns!\n\nHave fun!");
+	userInput = "start";
+	return userInput;
+}
 
-function rollDice(){
+function rollDice(totalPoints, turnsLeft){
 		alert("You roll the dice!")
 		let diceResults = [];
 		let d4 = Math.floor(Math.random() * 4 + 1);
@@ -63,11 +76,11 @@ function rollDice(){
 		let d12 = Math.floor(Math.random() * 12 + 1);
 		let d20 = Math.floor(Math.random() * 20 + 1);
 		diceResults.push(d4,d6,d8,d10,d12,d20);
-		alert("You rolled " + diceResults);
+		alert("You rolled " + diceResults + "\nYou currently have: " + totalPoints + " points.\nYou have " + turnsLeft + " turns left.");
 		let rollAgain = prompt("Would you like to roll again? YES or NO.");
 		rollAgain = rollAgain.toLowerCase();
 		if(rollAgain == "yes"){
-			diceResults = rollDiceAgain();
+			diceResults = rollDiceAgain(totalPoints, turnsLeft);
 			return diceResults;
 		}
 		else if (rollAgain == "no"){
@@ -75,7 +88,7 @@ function rollDice(){
 		}
 }
 
-function rollDiceAgain(){
+function rollDiceAgain(totalPoints, turnsLeft){
 		let diceResults = [];
 		alert("You roll the dice a second time!");
 		let d4 = Math.floor(Math.random() * 4 + 1);
@@ -85,15 +98,15 @@ function rollDiceAgain(){
 		let d12 = Math.floor(Math.random() * 12 + 1);
 		let d20 = Math.floor(Math.random() * 20 + 1);
 		diceResults.push(d4,d6,d8,d10,d12,d20);
-		alert("You rolled " + diceResults);
+		alert("You rolled " + diceResults + "\nYou currently have: " + totalPoints + " points.\nYou have " + turnsLeft + " turns left.");
 		return diceResults;
 }
 
 function getOddEvenPoints(diceResults){
 	let newOddEvenPoints = 0;
-	let evenNumberPoints = 1
-	let oddNumberPoints = -1
-	let evenNumberDivisor = 2
+	let evenNumberPoints = 1;
+	let oddNumberPoints = -1;
+	let evenNumberDivisor = 2;
 	for (let i = 0; i < diceResults.length; i++){
 		if (diceResults[i] % evenNumberDivisor == 0){
 			newOddEvenPoints += evenNumberPoints;
@@ -113,7 +126,7 @@ function getGreaterThanPoints(diceResults){
 	let oddGreaterThanFivePoints = -2;
 	let evenNumberDivisor = 2;
 	let greaterThanTen = 10;
-	let greaterThanFive = 5
+	let greaterThanFive = 5;
 	for(let i = 0; i < diceResults.length; i++){
 		if(diceResults[i] % evenNumberDivisor == 0 && diceResults[i] >= greaterThanTen){
 			newGreaterThanPoints += evenGreaterThanTenPoints;
@@ -136,10 +149,11 @@ function checkWinConditions(totalPoints, turnsLeft){
 	let negativeWinThreshold = -10;
 	if(totalPoints <= negativeWinThreshold || totalPoints >= positiveWinThreshold){
 		alert("Congratulations, you have won the game by accumulating " + totalPoints + " points!")
-		return 0;
+		return true;
 	}
-	else if(turnsLeft = 0){
-		alert("You've run out of turns! Game Over! (You accumulated " + totalPoints + " points.");
+	else if(turnsLeft === 0){
+		alert("You've run out of turns! Game Over! (You finished the game with " + totalPoints + " points.\n\nBetter luck next time!");
+		return true;
 	}
 }
 
