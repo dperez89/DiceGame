@@ -1,51 +1,59 @@
 "use strict";
 
+// Need to try and find a way to keep erroneous user input from creating a hole for the program to fall through. 
+// Possibly adjust winning condition parameters to slightly increase difficulty of winning the game.
+// Possibly adjust menu options to try and make it so that selecting an option will actually return to gaining userInput instead of
+	// creating another hole for the program to fall through. 
+
 launchGame();
 
 function launchGame(){
+	let newGameStatus = true;
 	let totalPoints = 0;
 	let winStatus = false;
 	let newOddEvenPoints;
 	let newGreaterThanPoints;
 	let diceResults;
-	let userInput = getUserInput();
+	let userInput;
 
-	if (userInput === "start"){
-		rules();
-		startGame();
-		for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
-			diceResults = rollDice(totalPoints, turnsLeft);
-			newOddEvenPoints = getOddEvenPoints(diceResults);
-			newGreaterThanPoints = getGreaterThanPoints(diceResults);
-			totalPoints += (newOddEvenPoints + newGreaterThanPoints);
-			alert("You gain " + (newOddEvenPoints + newGreaterThanPoints) + " points from this turn!");
-			alert("You now have a total of " + totalPoints + " points.");
-			alert("You now have " + (turnsLeft - 1) + " turns left.")
-			winStatus = checkWinConditions(totalPoints, turnsLeft);
-			if(winStatus == true){
-				turnsLeft = -1;
-				exitGame();
+	while(newGameStatus == true){
+		userInput = getUserInput();
+		userInput = userInput.toLowerCase();
+		if (userInput === "start"){
+			newGameStatus = false;
+			rules();
+			startGame();
+			for(let turnsLeft = 4; turnsLeft >= 0; turnsLeft--){
+				diceResults = rollDice(totalPoints, turnsLeft);
+				newOddEvenPoints = getOddEvenPoints(diceResults);
+				newGreaterThanPoints = getGreaterThanPoints(diceResults);
+				totalPoints += (newOddEvenPoints + newGreaterThanPoints);
+				alert("You gain " + (newOddEvenPoints + newGreaterThanPoints) + " points from this turn!");
+				alert("You now have a total of " + totalPoints + " points.");
+				alert("You now have " + (turnsLeft - 1) + " turns left.")
+				winStatus = checkWinConditions(totalPoints, turnsLeft);
+				if(winStatus == true){
+					turnsLeft = -1;
+					exitGame();
+				}
 			}
-		}
 
-	}
-	else if(userInput === "exit"){
-		exitGame();
-		return 0;
-	}
-	else if(userInput === "error"){
-		alert("Command not recognized, please try again");
-		getUserInput();
+		}
+		else if(userInput === "exit"){
+			newGameStatus = false;
+			exitGame();
+			return 0;
+		}
+		else{
+			alert("Command not recognized, please try again");
+		}
 	}
 }	
 
 function getUserInput(){
 	alert("Please make a selection!");
-	let userInput = prompt("START " + "or" + " EXIT " + " RULES")
+	let userInput = prompt("START\nEXIT");
 	userInput = userInput.toLowerCase();
-	if (userInput !== "start" && userInput !== "exit" && userInput !== "rules"){
-		userInput = "error";
-	}
 	return userInput;
 }
 
